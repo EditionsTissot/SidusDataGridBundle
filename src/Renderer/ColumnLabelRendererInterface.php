@@ -19,10 +19,5 @@ use Sidus\DataGridBundle\Model\Column;
  */
 interface ColumnLabelRendererInterface
 {
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     public function renderColumnLabel(Column $column): string;
 }

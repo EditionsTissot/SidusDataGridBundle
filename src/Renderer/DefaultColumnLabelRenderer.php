@@ -21,27 +21,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class DefaultColumnLabelRenderer implements ColumnLabelRendererInterface
 {
-    /** @var TranslatorInterface */
     protected TranslatorInterface $translator;
 
-    /**
-     * @param TranslatorInterface $translator
-     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     public function renderColumnLabel(Column $column): string
     {
         $label = $column->getLabel();
+
         if (!$label) {
             $key = "datagrid.{$column->getDataGrid()->getCode()}.{$column->getCode()}";
+
             if ($this->translator instanceof TranslatorBagInterface
                 && $this->translator->getCatalogue()
                 && $this->translator->getCatalogue()->has($key)

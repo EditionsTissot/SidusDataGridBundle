@@ -23,22 +23,16 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * To learn more see {@link
- * http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
+ * To learn more see {@link * http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  *
  * @author Vincent Chalnot <vincent@sidus.fr>
  */
 class Configuration implements ConfigurationInterface
 {
-    /** @var string */
     protected string $root;
 
-    /** @var Closure */
     protected Closure $serviceResolver;
 
-    /**
-     * @param string $root
-     */
     public function __construct(string $root = 'sidus_data_grid')
     {
         $this->root = $root;
@@ -49,6 +43,7 @@ class Configuration implements ConfigurationInterface
 
     /**
      * {@inheritdoc}
+     *
      * @throws RuntimeException
      */
     public function getConfigTreeBuilder(): TreeBuilder
@@ -71,15 +66,14 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->variableNode('actions')->defaultValue([])->end()
             ->append($this->getDataGridConfigTreeBuilder())
-            ->end();
+            ->end()
+        ;
 
         return $treeBuilder;
     }
 
     /**
      * @throws RuntimeException
-     *
-     * @return NodeDefinition
      */
     protected function getDataGridConfigTreeBuilder(): NodeDefinition
     {
@@ -89,21 +83,20 @@ class Configuration implements ConfigurationInterface
             ->useAttributeAsKey('code')
             ->prototype('array')
             ->performNoDeepMerging()
-            ->children();
+            ->children()
+        ;
 
         $this->appendDataGridDefinition($dataGridDefinition);
 
         $dataGridDefinition
             ->end()
             ->end()
-            ->end();
+            ->end()
+        ;
 
         return $node;
     }
 
-    /**
-     * @param NodeBuilder $dataGridDefinition
-     */
     protected function appendDataGridDefinition(NodeBuilder $dataGridDefinition): void
     {
         $columnDefinition = $dataGridDefinition
@@ -124,19 +117,18 @@ class Configuration implements ConfigurationInterface
             ->variableNode('reset_button')->end()
             ->arrayNode('columns')
             ->prototype('array')
-            ->children();
+            ->children()
+        ;
 
         $this->appendColumnDefinition($columnDefinition);
 
         $columnDefinition
             ->end()
             ->end()
-            ->end();
+            ->end()
+        ;
     }
 
-    /**
-     * @param NodeBuilder $columnDefinition
-     */
     protected function appendColumnDefinition(NodeBuilder $columnDefinition): void
     {
         $columnDefinition

@@ -24,7 +24,6 @@ use UnexpectedValueException;
  */
 class DataGridRegistry
 {
-    /** @var QueryHandlerRegistry */
     protected QueryHandlerRegistry $queryHandlerRegistry;
 
     /** @var DataGrid[] */
@@ -33,39 +32,25 @@ class DataGridRegistry
     /** @var array[] */
     protected array $dataGridConfigurations = [];
 
-    /**
-     * @param QueryHandlerRegistry $queryHandlerRegistry
-     */
     public function __construct(QueryHandlerRegistry $queryHandlerRegistry)
     {
         $this->queryHandlerRegistry = $queryHandlerRegistry;
     }
 
-    /**
-     * @param string $code
-     * @param array  $configuration
-     */
     public function addRawDataGridConfiguration(string $code, array $configuration): void
     {
         $this->dataGridConfigurations[$code] = $configuration;
     }
 
-    /**
-     * @param DataGrid $dataGrid
-     */
     public function addDataGrid(DataGrid $dataGrid): void
     {
         $this->dataGrids[$dataGrid->getCode()] = $dataGrid;
     }
 
     /**
-     * @param string $code
-     *
      * @throws MissingQueryHandlerFactoryException
      * @throws MissingQueryHandlerException
      * @throws MissingFilterException
-     *
-     * @return DataGrid
      */
     public function getDataGrid(string $code): DataGrid
     {
@@ -76,24 +61,15 @@ class DataGridRegistry
         return $this->dataGrids[$code];
     }
 
-    /**
-     * @param string $code
-     *
-     * @return bool
-     */
     public function hasDataGrid(string $code): bool
     {
         return array_key_exists($code, $this->dataGrids) || array_key_exists($code, $this->dataGridConfigurations);
     }
 
     /**
-     * @param string $code
-     *
      * @throws MissingQueryHandlerFactoryException
      * @throws MissingQueryHandlerException
      * @throws MissingFilterException
-     *
-     * @return DataGrid
      */
     protected function buildDataGrid(string $code): DataGrid
     {
@@ -103,10 +79,10 @@ class DataGridRegistry
 
         $configuration = $this->dataGridConfigurations[$code];
         $this->queryHandlerRegistry->addRawQueryHandlerConfiguration(
-            '__sidus_datagrid.'.$code,
+            '__sidus_datagrid.' . $code,
             $configuration['query_handler']
         );
-        $configuration['query_handler'] = $this->queryHandlerRegistry->getQueryHandler('__sidus_datagrid.'.$code);
+        $configuration['query_handler'] = $this->queryHandlerRegistry->getQueryHandler('__sidus_datagrid.' . $code);
 
         $dataGrid = new DataGrid($code, $configuration);
         $this->addDataGrid($dataGrid);
