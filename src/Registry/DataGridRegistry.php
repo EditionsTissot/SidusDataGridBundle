@@ -25,13 +25,13 @@ use UnexpectedValueException;
 class DataGridRegistry
 {
     /** @var QueryHandlerRegistry */
-    protected $queryHandlerRegistry;
+    protected QueryHandlerRegistry $queryHandlerRegistry;
 
     /** @var DataGrid[] */
-    protected $dataGrids = [];
+    protected array $dataGrids = [];
 
     /** @var array[] */
-    protected $dataGridConfigurations = [];
+    protected array $dataGridConfigurations = [];
 
     /**
      * @param QueryHandlerRegistry $queryHandlerRegistry
@@ -45,7 +45,7 @@ class DataGridRegistry
      * @param string $code
      * @param array  $configuration
      */
-    public function addRawDataGridConfiguration(string $code, array $configuration)
+    public function addRawDataGridConfiguration(string $code, array $configuration): void
     {
         $this->dataGridConfigurations[$code] = $configuration;
     }
@@ -53,7 +53,7 @@ class DataGridRegistry
     /**
      * @param DataGrid $dataGrid
      */
-    public function addDataGrid(DataGrid $dataGrid)
+    public function addDataGrid(DataGrid $dataGrid): void
     {
         $this->dataGrids[$dataGrid->getCode()] = $dataGrid;
     }

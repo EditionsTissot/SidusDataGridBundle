@@ -31,15 +31,15 @@ use Symfony\Component\DependencyInjection\Reference;
 class Configuration implements ConfigurationInterface
 {
     /** @var string */
-    protected $root;
+    protected string $root;
 
     /** @var Closure */
-    protected $serviceResolver;
+    protected Closure $serviceResolver;
 
     /**
      * @param string $root
      */
-    public function __construct($root = 'sidus_data_grid')
+    public function __construct(string $root = 'sidus_data_grid')
     {
         $this->root = $root;
         $this->serviceResolver = static function ($reference) {
@@ -53,8 +53,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root($this->root);
+        $treeBuilder = new TreeBuilder($this->root);
+        $rootNode = $treeBuilder->getRootNode();
         $rootNode
             ->children()
             ->scalarNode('default_form_theme')->defaultNull()->end()
@@ -83,8 +83,8 @@ class Configuration implements ConfigurationInterface
      */
     protected function getDataGridConfigTreeBuilder(): NodeDefinition
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('configurations');
+        $builder = new TreeBuilder('configurations');
+        $node = $builder->getRootNode();
         $dataGridDefinition = $node
             ->useAttributeAsKey('code')
             ->prototype('array')

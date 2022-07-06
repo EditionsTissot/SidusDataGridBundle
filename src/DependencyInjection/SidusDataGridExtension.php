@@ -29,7 +29,7 @@ use function is_array;
 class SidusDataGridExtension extends SidusBaseExtension
 {
     /** @var array */
-    protected $globalConfiguration;
+    protected array $globalConfiguration;
 
     /**
      * {@inheritdoc}

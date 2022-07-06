@@ -27,7 +27,7 @@ use Twig\TwigFunction;
 class RendererExtension extends AbstractExtension
 {
     /** @var Environment */
-    protected $twig;
+    protected Environment $twig;
 
     /**
      * @param Environment $twig

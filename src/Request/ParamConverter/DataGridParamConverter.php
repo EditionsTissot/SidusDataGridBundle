@@ -23,7 +23,7 @@ use Sidus\DataGridBundle\Registry\DataGridRegistry;
 class DataGridParamConverter extends AbstractParamConverter
 {
     /** @var DataGridRegistry */
-    protected $dataGridRegistry;
+    protected DataGridRegistry $dataGridRegistry;
 
     /**
      * @param DataGridRegistry $dataGridRegistry

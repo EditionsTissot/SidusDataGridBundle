@@ -15,7 +15,7 @@ use IntlDateFormatter;
 use NumberFormatter;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use function is_bool;
 use function is_float;
 use function is_int;
@@ -29,16 +29,19 @@ use function is_iterable;
 class DefaultColumnValueRenderer implements ColumnValueRendererInterface
 {
     /** @var TranslatorInterface */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     /** @var PropertyAccessorInterface */
-    protected $accessor;
+    protected PropertyAccessorInterface $accessor;
 
     /**
      * @param TranslatorInterface       $translator
      * @param PropertyAccessorInterface $accessor
      */
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $accessor)
+    public function __construct(
+        TranslatorInterface $translator,
+        PropertyAccessorInterface $accessor
+    )
     {
         $this->translator = $translator;
         $this->accessor = $accessor;
