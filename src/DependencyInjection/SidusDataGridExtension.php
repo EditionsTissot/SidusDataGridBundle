@@ -10,6 +10,7 @@
 
 namespace Sidus\DataGridBundle\DependencyInjection;
 
+use function is_array;
 use Sidus\BaseBundle\DependencyInjection\SidusBaseExtension;
 use Sidus\DataGridBundle\Registry\DataGridRegistry;
 use Sidus\FilterBundle\DependencyInjection\Configuration as FilterConfiguration;
@@ -17,7 +18,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use UnexpectedValueException;
-use function is_array;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -28,8 +28,7 @@ use function is_array;
  */
 class SidusDataGridExtension extends SidusBaseExtension
 {
-    /** @var array */
-    protected $globalConfiguration;
+    protected array $globalConfiguration;
 
     /**
      * {@inheritdoc}
@@ -42,6 +41,7 @@ class SidusDataGridExtension extends SidusBaseExtension
         $this->globalConfiguration = $this->processConfiguration($configuration, $configs);
 
         $dataGridRegistry = $container->getDefinition(DataGridRegistry::class);
+
         foreach ((array) $this->globalConfiguration['configurations'] as $code => $dataGridConfiguration) {
             $dataGridConfiguration = $this->finalizeConfiguration($code, $dataGridConfiguration);
             $dataGridRegistry->addMethodCall('addRawDataGridConfiguration', [$code, $dataGridConfiguration]);
@@ -50,11 +50,6 @@ class SidusDataGridExtension extends SidusBaseExtension
 
     /**
      * Handle configuration parsing logic not handled by the semantic configuration definition
-     *
-     * @param string $code
-     * @param array  $dataGridConfiguration
-     *
-     * @return array
      */
     protected function finalizeConfiguration(
         string $code,
@@ -63,6 +58,7 @@ class SidusDataGridExtension extends SidusBaseExtension
         // Handle possible parent configuration @todo find a better way to do this
         if (isset($dataGridConfiguration['parent'])) {
             $parent = $dataGridConfiguration['parent'];
+
             if (empty($this->globalConfiguration['configurations'][$parent])) {
                 throw new UnexpectedValueException("Unknown configuration {$parent}");
             }
@@ -75,12 +71,15 @@ class SidusDataGridExtension extends SidusBaseExtension
         if (empty($dataGridConfiguration['form_theme'])) {
             $dataGridConfiguration['form_theme'] = $this->globalConfiguration['default_form_theme'];
         }
+
         if (empty($dataGridConfiguration['template'])) {
             $dataGridConfiguration['template'] = $this->globalConfiguration['default_datagrid_template'];
         }
+
         if (empty($dataGridConfiguration['column_value_renderer'])) {
             $dataGridConfiguration['column_value_renderer'] = $this->globalConfiguration['default_column_value_renderer'];
         }
+
         if (empty($dataGridConfiguration['column_label_renderer'])) {
             $dataGridConfiguration['column_label_renderer'] = $this->globalConfiguration['default_column_label_renderer'];
         }
@@ -97,21 +96,13 @@ class SidusDataGridExtension extends SidusBaseExtension
                     ltrim($dataGridConfiguration['query_handler'], '@')
                 );
             } else {
-                throw new UnexpectedValueException(
-                    'query_handler option must be either a service or a valid filter configuration'
-                );
+                throw new UnexpectedValueException('query_handler option must be either a service or a valid filter configuration');
             }
         }
 
         return $dataGridConfiguration;
     }
 
-    /**
-     * @param string $code
-     * @param array  $queryHandlerConfig
-     *
-     * @return array
-     */
     protected function finalizeFilterConfiguration(string $code, array $queryHandlerConfig): array
     {
         // Parse configuration using Configuration parser from FilterBundle
@@ -132,8 +123,6 @@ class SidusDataGridExtension extends SidusBaseExtension
 
     /**
      * Allows the configuration class to be different in inherited classes
-     *
-     * @return ConfigurationInterface
      */
     protected function createConfigurationParser(): ConfigurationInterface
     {
@@ -142,8 +131,6 @@ class SidusDataGridExtension extends SidusBaseExtension
 
     /**
      * Allows the configuration class to be different in inherited classes
-     *
-     * @return ConfigurationInterface
      */
     protected function createFilterConfigurationParser(): ConfigurationInterface
     {

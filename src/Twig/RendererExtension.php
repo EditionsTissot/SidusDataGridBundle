@@ -26,20 +26,13 @@ use Twig\TwigFunction;
  */
 class RendererExtension extends AbstractExtension
 {
-    /** @var Environment */
-    protected $twig;
+    protected Environment $twig;
 
-    /**
-     * @param Environment $twig
-     */
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
     }
 
-    /**
-     * @return array
-     */
     public function getFunctions(): array
     {
         return [
@@ -57,14 +50,9 @@ class RendererExtension extends AbstractExtension
     }
 
     /**
-     * @param DataGrid $dataGrid
-     * @param array    $viewParameters
-     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     *
-     * @return string
      */
     public function renderDataGrid(DataGrid $dataGrid, array $viewParameters = []): string
     {
@@ -76,16 +64,12 @@ class RendererExtension extends AbstractExtension
 
     /**
      * Simple function to split form widgets in as many columns as wanted
-     *
-     * @param FormView $formView
-     * @param int      $numColumns
-     *
-     * @return array
      */
     public function getFilterColumns(FormView $formView, int $numColumns = 3): array
     {
         $columns = [];
         $i = 0;
+
         foreach ($formView as $formItem) {
             $columns[$i % $numColumns][] = $formItem;
             ++$i;

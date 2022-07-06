@@ -12,14 +12,14 @@ namespace Sidus\DataGridBundle\Renderer;
 
 use DateTimeInterface;
 use IntlDateFormatter;
-use NumberFormatter;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use function is_bool;
 use function is_float;
 use function is_int;
 use function is_iterable;
+use NumberFormatter;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Render values inside the Twig engine
@@ -28,28 +28,18 @@ use function is_iterable;
  */
 class DefaultColumnValueRenderer implements ColumnValueRendererInterface
 {
-    /** @var TranslatorInterface */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /** @var PropertyAccessorInterface */
-    protected $accessor;
+    protected PropertyAccessorInterface $accessor;
 
-    /**
-     * @param TranslatorInterface       $translator
-     * @param PropertyAccessorInterface $accessor
-     */
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $accessor)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        PropertyAccessorInterface $accessor
+    ) {
         $this->translator = $translator;
         $this->accessor = $accessor;
     }
 
-    /**
-     * @param mixed $value
-     * @param array $options
-     *
-     * @return string
-     */
     public function renderValue($value, array $options = []): string
     {
         $resolver = new OptionsResolver();
@@ -60,7 +50,8 @@ class DefaultColumnValueRenderer implements ColumnValueRendererInterface
             if (null !== $options['date_format']) {
                 return (string) $value->format($options['date_format']);
             }
-            if ($value->format('H:i') === '00:00') {
+
+            if ('00:00' === $value->format('H:i')) {
                 $options['time_type'] = IntlDateFormatter::NONE;
             }
             $dateFormatter = new IntlDateFormatter(
@@ -71,9 +62,11 @@ class DefaultColumnValueRenderer implements ColumnValueRendererInterface
 
             return (string) $dateFormatter->format($value);
         }
+
         if (is_int($value)) {
             return (string) $value;
         }
+
         if (is_float($value)) {
             if (null !== $options['decimals'] || null !== $options['dec_point'] || null !== $options['thousands_sep']) {
                 return number_format(
@@ -87,19 +80,22 @@ class DefaultColumnValueRenderer implements ColumnValueRendererInterface
 
             return (string) $numberFormatter->format($value);
         }
+
         if (is_iterable($value)) {
             $items = [];
-            /** @noinspection ForeachSourceInspection */
+            /* @noinspection ForeachSourceInspection */
             foreach ($value as $key => $item) {
                 $rendered = $this->renderValue($item, $options);
+
                 if (!is_numeric($key)) {
-                    $rendered = $key.$options['key_value_separator'].$rendered;
+                    $rendered = $key . $options['key_value_separator'] . $rendered;
                 }
                 $items[] = $rendered;
             }
 
             return implode($options['array_glue'], $items);
         }
+
         if (is_bool($value)) {
             if ($options['bool_use_translator']) {
                 return (string) $this->translator->trans(
@@ -113,9 +109,6 @@ class DefaultColumnValueRenderer implements ColumnValueRendererInterface
         return (string) $value;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(

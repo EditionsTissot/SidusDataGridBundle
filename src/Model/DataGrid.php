@@ -75,10 +75,6 @@ class DataGrid
     /** @var array */
     protected $resetButton = [];
 
-    /**
-     * @param string $code
-     * @param array  $configuration
-     */
     public function __construct(string $code, array $configuration)
     {
         $this->code = $code;
@@ -87,6 +83,7 @@ class DataGrid
         unset($configuration['columns']);
 
         $accessor = PropertyAccess::createPropertyAccessor();
+
         foreach ($configuration as $key => $option) {
             $accessor->setValue($this, $key, $option);
         }
@@ -96,33 +93,21 @@ class DataGrid
         }
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return QueryHandlerInterface
-     */
     public function getQueryHandler(): QueryHandlerInterface
     {
         return $this->queryHandler;
     }
 
-    /**
-     * @param QueryHandlerInterface $queryHandler
-     */
     public function setQueryHandler(QueryHandlerInterface $queryHandler): void
     {
         $this->queryHandler = $queryHandler;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFormTheme(): ?string
     {
         return $this->formTheme;
@@ -136,65 +121,41 @@ class DataGrid
         $this->formTheme = $formTheme;
     }
 
-    /**
-     * @return string
-     */
     public function getTemplate(): string
     {
         return $this->template;
     }
 
-    /**
-     * @param string $template
-     */
     public function setTemplate(string $template): void
     {
         $this->template = $template;
     }
 
-    /**
-     * @return array
-     */
     public function getTemplateVars(): array
     {
         return $this->templateVars;
     }
 
-    /**
-     * @param array $templateVars
-     */
     public function setTemplateVars(array $templateVars): void
     {
         $this->templateVars = $templateVars;
     }
 
-    /**
-     * @return ColumnValueRendererInterface
-     */
     public function getColumnValueRenderer(): ColumnValueRendererInterface
     {
         return $this->columnValueRenderer;
     }
 
-    /**
-     * @param ColumnValueRendererInterface $columnValueRenderer
-     */
     public function setColumnValueRenderer(ColumnValueRendererInterface $columnValueRenderer): void
     {
         $this->columnValueRenderer = $columnValueRenderer;
     }
 
-    /**
-     * @return ColumnLabelRendererInterface
-     */
     public function getColumnLabelRenderer(): ColumnLabelRendererInterface
     {
         return $this->columnLabelRenderer;
     }
 
-    /**
-     * @param ColumnLabelRendererInterface $columnLabelRenderer
-     */
     public function setColumnLabelRenderer(ColumnLabelRendererInterface $columnLabelRenderer): void
     {
         $this->columnLabelRenderer = $columnLabelRenderer;
@@ -209,8 +170,7 @@ class DataGrid
     }
 
     /**
-     * @param Column $column
-     * @param int    $index
+     * @param int $index
      */
     public function addColumn(Column $column, int $index = null): void
     {
@@ -229,9 +189,6 @@ class DataGrid
         $this->columns = $columns;
     }
 
-    /**
-     * @return array
-     */
     public function getActions(): array
     {
         return $this->actions;
@@ -241,8 +198,6 @@ class DataGrid
      * @param string $action
      *
      * @throws UnexpectedValueException
-     *
-     * @return array
      */
     public function getAction($action): array
     {
@@ -253,60 +208,36 @@ class DataGrid
         return $this->actions[$action];
     }
 
-    /**
-     * @param string $action
-     *
-     * @return bool
-     */
     public function hasAction(string $action): bool
     {
         return array_key_exists($action, $this->actions);
     }
 
-    /**
-     * @param string $action
-     * @param array  $configuration
-     */
     public function setAction(string $action, array $configuration): void
     {
         $this->actions[$action] = $configuration;
     }
 
-    /**
-     * @param array $actions
-     */
     public function setActions(array $actions): void
     {
         $this->actions = $actions;
     }
 
-    /**
-     * @return array
-     */
     public function getSubmitButton(): array
     {
         return $this->submitButton;
     }
 
-    /**
-     * @param array $submitButton
-     */
     public function setSubmitButton(array $submitButton): void
     {
         $this->submitButton = $submitButton;
     }
 
-    /**
-     * @return array
-     */
     public function getResetButton(): array
     {
         return $this->resetButton;
     }
 
-    /**
-     * @param array $resetButton
-     */
     public function setResetButton(array $resetButton): void
     {
         $this->resetButton = $resetButton;
@@ -314,8 +245,6 @@ class DataGrid
 
     /**
      * @throws LogicException
-     *
-     * @return FormInterface
      */
     public function getForm(): FormInterface
     {
@@ -326,17 +255,11 @@ class DataGrid
         return $this->form;
     }
 
-    /**
-     * @return array
-     */
     public function getFormOptions(): array
     {
         return $this->formOptions;
     }
 
-    /**
-     * @param array $formOptions
-     */
     public function setFormOptions(array $formOptions): void
     {
         $this->formOptions = $formOptions;
@@ -344,8 +267,6 @@ class DataGrid
 
     /**
      * @throws LogicException
-     *
-     * @return FormView
      */
     public function getFormView(): FormView
     {
@@ -356,11 +277,6 @@ class DataGrid
         return $this->formView;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     *
-     * @return FormInterface
-     */
     public function buildForm(FormBuilderInterface $builder): FormInterface
     {
         $this->buildFilterActions($builder);
@@ -371,17 +287,11 @@ class DataGrid
         return $this->form;
     }
 
-    /**
-     * @param Request $request
-     */
     public function handleRequest(Request $request): void
     {
         $this->queryHandler->handleRequest($request);
     }
 
-    /**
-     * @param array $data
-     */
     public function handleArray(array $data): void
     {
         $this->queryHandler->handleArray($data);
@@ -399,7 +309,6 @@ class DataGrid
 
     /**
      * @param string $action
-     * @param array  $parameters
      *
      * @throws UnexpectedValueException
      */
@@ -417,6 +326,7 @@ class DataGrid
 
             return;
         }
+
         if ('reset_button' === $action) {
             $this->setResetButton(
                 array_merge(
@@ -440,24 +350,20 @@ class DataGrid
         );
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     protected function buildFilterActions(FormBuilderInterface $builder): void
     {
         $visibleFilterCount = 0;
+
         foreach ($this->getQueryHandler()->getConfiguration()->getFilters() as $filter) {
             $filter->getOption('hidden') ?: ++$visibleFilterCount;
         }
+
         if ($visibleFilterCount > 0) {
             $this->buildResetAction($builder);
             $this->buildSubmitAction($builder);
         }
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     protected function buildResetAction(FormBuilderInterface $builder): void
     {
         $action = $builder->getOption('action');
@@ -472,9 +378,6 @@ class DataGrid
         $builder->add('filterResetButton', $type, $options);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     protected function buildSubmitAction(FormBuilderInterface $builder): void
     {
         $defaults = [
@@ -490,9 +393,6 @@ class DataGrid
         $builder->add('filterSubmitButton', $type, $options);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     protected function buildDataGridActions(FormBuilderInterface $builder): void
     {
         $actionsBuilder = $builder->create(
@@ -502,6 +402,7 @@ class DataGrid
                 'label' => false,
             ]
         );
+
         foreach ($this->getActions() as $code => $options) {
             $type = empty($options['form_type']) ? LinkType::class : $options['form_type'];
             unset($options['form_type']);
@@ -510,10 +411,6 @@ class DataGrid
         $builder->add($actionsBuilder);
     }
 
-    /**
-     * @param string $key
-     * @param array  $columnConfiguration
-     */
     protected function createColumn(string $key, array $columnConfiguration): void
     {
         $this->columns[] = new Column($key, $this, $columnConfiguration);

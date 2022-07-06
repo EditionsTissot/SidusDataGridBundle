@@ -26,11 +26,6 @@ use UnexpectedValueException;
  */
 class LinkType extends AbstractType
 {
-    /**
-     * @param FormView      $view
-     * @param FormInterface $form
-     * @param array         $options
-     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['route'] = $options['route'];
@@ -39,8 +34,6 @@ class LinkType extends AbstractType
     }
 
     /**
-     * @param OptionsResolver $resolver
-     *
      * @throws AccessException
      * @throws UndefinedOptionsException
      * @throws UnexpectedValueException

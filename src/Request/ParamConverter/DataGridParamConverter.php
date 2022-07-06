@@ -22,20 +22,15 @@ use Sidus\DataGridBundle\Registry\DataGridRegistry;
  */
 class DataGridParamConverter extends AbstractParamConverter
 {
-    /** @var DataGridRegistry */
-    protected $dataGridRegistry;
+    protected DataGridRegistry $dataGridRegistry;
 
-    /**
-     * @param DataGridRegistry $dataGridRegistry
-     */
     public function __construct(DataGridRegistry $dataGridRegistry)
     {
         $this->dataGridRegistry = $dataGridRegistry;
     }
 
     /**
-     * @param string         $value
-     * @param ParamConverter $configuration
+     * @param string $value
      *
      * @return DataGrid
      */
@@ -44,9 +39,6 @@ class DataGridParamConverter extends AbstractParamConverter
         return $this->dataGridRegistry->getDataGrid($value);
     }
 
-    /**
-     * @return mixed
-     */
     protected function getClass()
     {
         return DataGrid::class;

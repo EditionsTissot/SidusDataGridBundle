@@ -12,7 +12,7 @@ namespace Sidus\DataGridBundle\Renderer;
 
 use Sidus\DataGridBundle\Model\Column;
 use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Render values inside the Twig engine
@@ -21,27 +21,20 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class DefaultColumnLabelRenderer implements ColumnLabelRendererInterface
 {
-    /** @var TranslatorInterface */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @param TranslatorInterface $translator
-     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     public function renderColumnLabel(Column $column): string
     {
         $label = $column->getLabel();
+
         if (!$label) {
             $key = "datagrid.{$column->getDataGrid()->getCode()}.{$column->getCode()}";
+
             if ($this->translator instanceof TranslatorBagInterface
                 && $this->translator->getCatalogue()
                 && $this->translator->getCatalogue()->has($key)
