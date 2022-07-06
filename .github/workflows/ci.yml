@@ -56,10 +56,10 @@ jobs:
               composer info -D
 
       -   name: Run PHP CS Fixer
-          run: composer run-script code-style-check
+          run: make phpcs-fixer-dry
 
       -   name: Run PHPSTAN
-          run: composer run-script static-analysis
+          run: make phpstan.run
 
-      -   name: Run UNIT-TESTS
-          run: composer run-script unit-test
+      -   name: Run dump check
+          run: make tests.var-dump-checker.ci

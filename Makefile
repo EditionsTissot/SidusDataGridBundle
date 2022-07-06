@@ -1,16 +1,13 @@
-.PHONY: install tests tests.ci phpstan.run security.check tests.var-dump-checker.ci
+.PHONY: install tests tests.ci phpstan.run tests.var-dump-checker.ci
 
 install:
 	composer install
 
-tests: phpstan.run security.check tests.var-dump-checker.ci
-tests.ci: phpstan.run security.check tests.var-dump-checker.ci
+tests: phpstan.run tests.var-dump-checker.ci
+tests.ci: phpstan.run tests.var-dump-checker.ci phpcs-fixer-dry
 
 phpstan.run:
 	vendor/bin/phpstan analyse --level=1 src
-
-security.check:
-	vendor/bin/security-checker security:check
 
 tests.var-dump-checker.ci:
 	vendor/bin/var-dump-check --symfony --exclude vendor --exclude demo .
