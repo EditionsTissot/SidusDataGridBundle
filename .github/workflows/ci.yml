@@ -12,7 +12,7 @@ jobs:
         php-version: ['7.4', '8.0', '8.1']
         symfony-version: ['4.4.*', '5.4.*', '6.0.*', '6.1.*']
 
-    name: PHP ${{ matrix.php-version }}
+    name: PHP ${{ matrix.php-version }} - Symfony ${{ matrix.symfony-version }}
 
     runs-on: 'ubuntu-20.04'
     env:
@@ -39,12 +39,14 @@ jobs:
           uses: actions/cache@v3
           with:
             path: ${{ steps.composer-cache.outputs.dir }}
-            key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('**/composer.*') }}-${{ matrix.composer-flags }}
+            key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.symfony-version }}-${{ hashFiles('**/composer.*') }}-${{ matrix.composer-flags }}
             restore-keys: |
-              composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('**/composer.*') }}-
-              composer-${{ runner.os }}-${{ matrix.php-version }}-
-              composer-${{ runner.os }}-
-              composer-
+              composer-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.symfony-version }}-${{ hashFiles('**/composer.*') }}-
+              composer-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.symfony-version }}-
+
+      -   name: Add symfony/symfony
+          run: composer require --dev --no-update symfony/symfony:${{ matrix.symfony-version }}
+
       -   name: Install dependencies
           uses: nick-invision/retry@v2
           with:
